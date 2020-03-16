@@ -1,7 +1,8 @@
-package com.android.photosfeed
+package com.android.photosfeed.presentation.screen
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.android.photosfeed.R
 
 class MainActivity : AppCompatActivity() {
 
