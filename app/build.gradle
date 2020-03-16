@@ -1,15 +1,16 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    compileSdkVersion rootProject.compileSdkVersion
+    buildToolsVersion rootProject.buildToolsVersion
 
     defaultConfig {
         applicationId "com.android.photosfeed"
-        minSdkVersion 21
-        targetSdkVersion 29
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
         versionCode 1
         versionName "1.0"
 
@@ -17,9 +18,49 @@ android {
     }
 
     buildTypes {
-        release {
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "BOOKS_BASE_URL", String.format("\"%s\"", books_base_url)
+        }
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "BOOKS_BASE_URL", String.format("\"%s\"", books_base_url)
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    kapt {
+        correctErrorTypes = true
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    androidExtensions {
+        experimental = true
+    }
+
+    flavorDimensions "default"
+
+    productFlavors {
+        development {
+            dimension "default"
+            applicationIdSuffix ".dev"
+        }
+        production {
+            dimension "default"
         }
     }
 
@@ -27,11 +68,63 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.core:core-ktx:1.0.2'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    // kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "androidx.core:core-ktx:$coreKtxVersion"
+
+    // support libraries
+    implementation "androidx.appcompat:appcompat:$appCompatVersion"
+    implementation "androidx.activity:activity:$androidActivity"
+    implementation "androidx.activity:activity-ktx:$androidActivity"
+    implementation "androidx.fragment:fragment:$androidFragment"
+    implementation "androidx.fragment:fragment-ktx:$androidFragment"
+    implementation "androidx.cardview:cardview:$cardViewVersion"
+    implementation "androidx.recyclerview:recyclerview:$recyclerVersion"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
+    implementation "com.google.android.material:material:$materialVersion"
+
+    // anko
+    implementation "org.jetbrains.anko:anko:$ankoVersion"
+
+    // architecture components
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
+    implementation "androidx.room:room-runtime:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+    testImplementation "androidx.arch.core:core-testing:$archCompomentVersion"
+
+    // dependency injection
+    implementation "com.google.dagger:dagger:$daggerVersion"
+    implementation "com.google.dagger:dagger-android:$daggerVersion"
+    implementation "com.google.dagger:dagger-android-support:$daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+    kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
+
+    // network
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
+    implementation "com.google.code.gson:gson:$gsonVersion"
+    testImplementation "com.squareup.okhttp3:mockwebserver:$okhttpVersion"
+
+    // glide
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    implementation "com.github.florent37:glidepalette:$glidePaletteVersion"
+    kapt "com.github.bumptech.glide:compiler:$glideVersion"
+
+    // adapter
+    implementation "com.github.skydoves:baserecyclerviewadapter:$baseAdapterVersion"
+
+    // debugging
+    implementation "com.jakewharton.timber:timber:$timberVersion"
+    implementation "com.facebook.stetho:stetho:$stethoVersion"
+    implementation "com.facebook.stetho:stetho-okhttp3:$stethoVersion"
+
+    // unit testing
+    testImplementation "junit:junit:$jUnitVersion"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
+    androidTestImplementation "androidx.test:runner:$runnerVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoCoreVersion"
+    androidTestImplementation "androidx.test.ext:junit:$androidxTest"
 }
