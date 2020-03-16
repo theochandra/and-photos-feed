@@ -2,7 +2,7 @@ package com.android.photosfeed.di
 
 import androidx.annotation.NonNull
 import com.android.photosfeed.BuildConfig
-import com.android.photosfeed.data.api.BooksService
+import com.android.photosfeed.data.api.PhotoService
 import com.android.photosfeed.data.api.LiveDataCallAdapterFactory
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import dagger.Module
@@ -41,7 +41,7 @@ class NetworkModule {
     fun provideRetrofit(@NonNull okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(BuildConfig.BOOKS_BASE_URL)
+            .baseUrl(BuildConfig.PHOTO_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(LiveDataCallAdapterFactory())
             .build()
@@ -50,8 +50,8 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideNewsService(@NonNull retrofit: Retrofit): BooksService {
-        return retrofit.create(BooksService::class.java)
+    fun provideNewsService(@NonNull retrofit: Retrofit): PhotoService {
+        return retrofit.create(PhotoService::class.java)
     }
 
 }

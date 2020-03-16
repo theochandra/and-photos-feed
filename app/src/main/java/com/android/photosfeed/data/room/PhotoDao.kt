@@ -5,15 +5,15 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.android.photosfeed.data.model.entity.Book
+import com.android.photosfeed.data.model.entity.Photo
 
 @Dao
-interface BookDao {
+interface PhotoDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertBookList(books: List<Book>)
+    fun insertPhotoList(photos: List<Photo>)
 
-    @Query("SELECT * FROM Book")
-    fun getBookList(): LiveData<List<Book>>
+    @Query("SELECT * FROM Photo")
+    fun getPhotoList(): LiveData<List<Photo>>
 
 }

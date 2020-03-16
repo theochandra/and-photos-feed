@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.annotation.NonNull
 import androidx.room.Room
 import com.android.photosfeed.data.room.AppDatabase
-import com.android.photosfeed.data.room.BookDao
+import com.android.photosfeed.data.room.PhotoDao
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -23,8 +23,8 @@ class PersistenceModule {
 
     @Provides
     @Singleton
-    fun provideNewsDao(@NonNull database: AppDatabase): BookDao {
-        return database.bookDao()
+    fun provideNewsDao(@NonNull database: AppDatabase): PhotoDao {
+        return database.photosDao()
     }
 
 }
